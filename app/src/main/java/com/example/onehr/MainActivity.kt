@@ -13,7 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 //import com.example.onehr.ui.theme.Screens.userStatusScreen
 import com.example.onehr.ui.theme.OneHrTheme
-import com.example.onehr.ui.theme.Screens.user.userStatusScreen
+import com.example.onehr.ui.userStatusScreen.userStatusScreen
 import userHomeScreen
 
 
