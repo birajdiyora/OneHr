@@ -21,37 +21,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.onehr.R
-import com.example.talkie.Screens.BottomNavigationItem
-import com.example.talkie.Screens.BottumNavigationMenu
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun userStatusScreen(navController: NavController) {
-        Scaffold(
-                topBar = {
-                        TopAppBar(
-                                title = {
-                                        Row (){
-                                                Text("oneHr",
-                                                        fontWeight = FontWeight.Bold,
-                                                        fontSize = 30.sp
-                                                )
-                                        }
-                                },
-                        )
-                },
-                bottomBar ={
-                        BottumNavigationMenu(selectedItem = BottomNavigationItem.HOMESCREENLIST, navController = navController )
-                },
-                content = { paddingValues ->
+fun UserStatusScreen() {
                         Column(
                                 modifier = Modifier
-                                        .padding(paddingValues)
                         ) {
                                 ProfileCard()
                         }
-                }
-        )
 }
 @Composable
 fun ProfileCard() {

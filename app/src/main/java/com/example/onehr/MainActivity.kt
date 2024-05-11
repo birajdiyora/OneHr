@@ -1,28 +1,21 @@
 package com.example.onehr
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.example.onehr.ui.loginScreen.Login
+import com.example.onehr.navigation.AuthenticationNavigation
+import com.example.onehr.ui.loginScreen.LoginScreen
+import com.example.onehr.ui.registrationScreen.RegisterScreen
 //import com.example.onehr.ui.theme.Screens.userStatusScreen
 import com.example.onehr.ui.theme.OneHrTheme
-import com.example.onehr.ui.userStatusScreen.userStatusScreen
-import userHomeScreen
+import dagger.hilt.android.AndroidEntryPoint
 
-
-sealed class Destinationscreen(var route : String){
-    object userHomeScreen : Destinationscreen("home")
-    object userStatusScreen : Destinationscreen("status")
-}
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,30 +26,20 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    oneHrNavigation()
+//                    RegisterScreen(
+//                        activity = this@MainActivity,
+//                    )
+                   AuthenticationNavigation(activity = this@MainActivity, onGotoNextActivity = {
+                       if(it == "User"){
+                           startActivity(Intent(this@MainActivity,UserActivity::class.java))
+                       }else{
+                           startActivity(Intent(this@MainActivity,WorkerActivity::class.java))
+                       }
+                   })
                 }
             }
         }
     }
-
-    @Composable
-    fun oneHrNavigation() {
-
-        val navController = rememberNavController()
-
-        NavHost(navController = navController, startDestination = Destinationscreen.userHomeScreen.route ){
-
-            composable(Destinationscreen.userHomeScreen.route){
-                userHomeScreen(navController=navController)
-            }
-            composable(Destinationscreen.userStatusScreen.route){
-                userStatusScreen(navController=navController)
-            }
-
-        }
-
-    }
-
 }
 
 

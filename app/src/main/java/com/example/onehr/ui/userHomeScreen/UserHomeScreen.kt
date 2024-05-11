@@ -1,7 +1,10 @@
+package com.example.onehr.ui.userHomeScreen
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -33,38 +36,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.onehr.R
-import com.example.talkie.Screens.BottomNavigationItem
-import com.example.talkie.Screens.BottumNavigationMenu
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun userHomeScreen(navController: NavController) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Row (){
-                        Text("oneHr",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 30.sp
-                            )
-                           }
-                     },
-                  )
-         },
-        bottomBar ={
-            BottumNavigationMenu(selectedItem = BottomNavigationItem.STATUSSCREENLIST, navController = navController )
-        },
-        content = { paddingValues ->
+fun UserHomeScreen() {
             Column(
                 modifier = Modifier
-                    .padding(paddingValues)
+                    .fillMaxSize()
             ) {
                 Demo_ExposedDropdownMenuBox()
                 ProfileCard()
             }
-        }
-    )
 }
 
 @Composable

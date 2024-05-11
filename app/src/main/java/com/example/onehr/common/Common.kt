@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,10 +27,10 @@ const val OTP_VIEW_TYPE_UNDERLINE = 1
 const val OTP_VIEW_TYPE_BORDER = 2
 
 @Composable
-fun CommonDialog() {
+fun Circulerdialog() {
 
     Dialog(onDismissRequest = { }) {
-        CircularProgressIndicator()
+       CircularProgressIndicator()
     }
 
 }
@@ -101,7 +102,7 @@ private fun CharView(
             .border(
                 width = 1.dp,
                 color = charColor,
-                shape = MaterialTheme.shapes.medium
+//                shape = MaterialTheme.shapes.medium
             )
             .padding(bottom = 4.dp)
             .background(charBackground)
@@ -122,6 +123,7 @@ private fun CharView(
             text = char,
             color = Color.Black,
             modifier = modifier.wrapContentHeight(),
+            style = MaterialTheme.typography.bodyLarge,
             fontSize = charSize,
             textAlign = TextAlign.Center,
         )
