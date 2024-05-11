@@ -32,7 +32,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.onehr.ui.theme.OneHrTheme
 import com.example.onehr.util.BottomNavigation
 import com.example.onehr.util.BottomNavigationItem
-
+//hello
 class UserActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
