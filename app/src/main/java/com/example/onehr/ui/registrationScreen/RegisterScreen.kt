@@ -421,13 +421,16 @@ fun RegisterScreen(
                     placeholder = { Text(text = "Enter Your Number") }
                 )
                 // dropdown list of category
-                Demo_ExposedDropdownMenuBox(
-                    workArray = workArray,
-                    onSelectedChange = {
-                        selectedWork = it
-                    },
-                    selectedWork = selectedWork
-                )
+                Column(modifier = Modifier.padding(start = 25.dp)) {
+                    Demo_ExposedDropdownMenuBox(
+                        workArray = workArray,
+                        onSelectedChange = {
+                            selectedWork = it
+                        },
+                        selectedWork = selectedWork,
+                    )
+                }
+
                 //worker experience
                 OutlinedTextField(
                     value = exp,
