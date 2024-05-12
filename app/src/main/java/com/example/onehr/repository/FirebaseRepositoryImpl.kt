@@ -6,6 +6,7 @@ import com.example.onehr.ui.registrationScreen.USER_TYPE_USER
 import com.example.onehr.util.RegistrationData
 import com.example.onehr.util.ResultExist
 import com.example.onehr.util.ResultState
+import com.example.onehr.util.Worker
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
@@ -170,6 +171,30 @@ class FirebaseRepositoryImpl @Inject constructor(
         )
             .addOnCompleteListener {
                 trySend(ResultState.Success("Success"))
+            }
+            .addOnFailureListener {
+                trySend(ResultState.Failure(it))
+            }
+        awaitClose {
+            close()
+        }
+    }
+
+    override fun insertAppointmentData(userUid: String, worker: Worker): Flow<ResultState<String>> = callbackFlow{
+        trySend(ResultState.Loading)
+        db.collection("appointment").document().set(
+            hashMapOf(
+                "userUid" to userUid,
+                "workerUid" to worker.UID,
+                "workerName" to worker.name,
+                "workerNumber" to worker.number,
+                "workerCategory" to worker.category,
+                "workerCharge" to worker.charge,
+                "workerExperience" to worker.exp
+            )
+        )
+            .addOnCompleteListener {
+                trySend(ResultState.Success("success"))
             }
             .addOnFailureListener {
                 trySend(ResultState.Failure(it))

@@ -4,6 +4,7 @@ import android.app.Activity
 import com.example.onehr.util.RegistrationData
 import com.example.onehr.util.ResultExist
 import com.example.onehr.util.ResultState
+import com.example.onehr.util.Worker
 import kotlinx.coroutines.flow.Flow
 
 interface FirebaseRepository {
@@ -17,5 +18,7 @@ interface FirebaseRepository {
     fun insertWorkerdata(registrationData: RegistrationData) : Flow<ResultState<String>>
 
     fun insertAllUserData(registrationData: RegistrationData) : Flow<ResultState<String>>
+
+    fun insertAppointmentData(userUid:String,worker: Worker) : Flow<ResultState<String>>
 
 }
