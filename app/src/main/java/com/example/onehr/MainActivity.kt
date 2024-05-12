@@ -15,6 +15,7 @@ import com.example.onehr.ui.registrationScreen.RegisterScreen
 import com.example.onehr.ui.theme.OneHrTheme
 import dagger.hilt.android.AndroidEntryPoint
 
+//edited by yash
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
