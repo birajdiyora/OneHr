@@ -53,7 +53,8 @@ val USER_TYPE_WORKER = "Worker"
 @Composable
 fun RegisterScreen(
     activity: Activity,
-    viewModel: RegisterScreenViewModel = hiltViewModel()
+    viewModel: RegisterScreenViewModel = hiltViewModel(),
+    onGoToNextActivity : (String) -> Unit
 ) {
 //    var registrationData by remember { mutableStateOf(RegistrationData()) }
     val focusRequester = remember { FocusRequester() }
@@ -153,9 +154,12 @@ fun RegisterScreen(
                                                         isDialog = true
                                                     }
                                                     is ResultState.Success ->{
+                                                        isDialog = false
                                                         "Register Success".toast()
+                                                        onGoToNextActivity(USER_TYPE_USER)
                                                     }
                                                     is ResultState.Failure ->{
+                                                        isDialog = false
                                                         "Some error occur".toast()
                                                     }
                                                 }
@@ -177,9 +181,12 @@ fun RegisterScreen(
                                                     }
 
                                                     is ResultState.Success -> {
+                                                        isDialog = false
                                                         "Register Success".toast()
+                                                        onGoToNextActivity(USER_TYPE_WORKER)
                                                     }
                                                     is ResultState.Failure -> {
+                                                        isDialog = false
                                                         "Some error occur".toast()
                                                     }
                                                 }

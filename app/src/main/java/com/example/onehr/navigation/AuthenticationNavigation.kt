@@ -27,7 +27,12 @@ fun AuthenticationNavigation(
                 })
         }
         composable(AuthenticationScreen.RegisterScreen.route){
-            RegisterScreen(activity = activity)
+            RegisterScreen(
+                activity = activity,
+                onGoToNextActivity = {
+                    onGotoNextActivity(it)
+                }
+                )
         }
     }
 }
