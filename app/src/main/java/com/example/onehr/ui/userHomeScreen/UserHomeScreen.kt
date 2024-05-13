@@ -1,5 +1,6 @@
 package com.example.onehr.ui.userHomeScreen
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,17 +41,28 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.onehr.R
+import com.example.onehr.common.NoAnyDataFound
+import com.example.onehr.common.toast
+import com.example.onehr.util.ResultState
 import com.example.onehr.util.Worker
+import kotlinx.coroutines.launch
+import okhttp3.internal.wait
 
+@SuppressLint("SuspiciousIndentation")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserHomeScreen(
     viewModel: UserHomeScreenViewModel = hiltViewModel()
 ) {
+    val scope = rememberCoroutineScope()
     var isAlertDialogDisplay by remember {
         mutableStateOf(false)
+    }
+    var openDialogWorker by remember {
+        mutableStateOf(Worker())
     }
     if(isAlertDialogDisplay)
         AlertDialog(
@@ -57,24 +70,57 @@ fun UserHomeScreen(
                                isAlertDialogDisplay = false
             },
             confirmButton = { 
-                TextButton(onClick = { /*TODO*/ }) {
-                    Text(text = "Send Request")
+                TextButton(onClick = {
+                    isAlertDialogDisplay = false
+                    scope.launch {
+                        viewModel.insertAppointmentdata(openDialogWorker).collect{
+                            when(it){
+                                is ResultState.Loading ->{
+
+                                }
+                                is ResultState.Success ->{
+                                    "Request Send success".toast()
+                                }
+                                is ResultState.Failure ->{
+
+                                }
+                            }
+                        }
+                        isAlertDialogDisplay = false
+                    }
+                }) {
+                    Text(text = "Confirm")
                 }
             },
             dismissButton = {
-                TextButton(onClick = { /*TODO*/ }) {
+                TextButton(onClick = {
+                    isAlertDialogDisplay = false
+                }) {
                     Text(text = "Cancel")
                 }
+            },
+            title = {
+                Text(text = "Send Request!!")
             })
         
             Column(
                 modifier = Modifier
                     .fillMaxSize()
             ) {
-                Demo_ExposedDropdownMenuBox()
-                LazyColumn {
-                    items(viewModel.workerListState.toList()){
-                        ProfileCard(worker = it)
+                Demo_ExposedDropdownMenuBox(viewModel)
+                if(viewModel.workerListState.toList().isEmpty()){
+                    NoAnyDataFound()
+                }else {
+                    LazyColumn {
+                        items(viewModel.workerListState.toList()) {
+                            ProfileCard(
+                                worker = it,
+                                onDialogStateChange = { it, that ->
+                                    isAlertDialogDisplay = it
+                                    openDialogWorker = that
+                                }
+                            )
+                        }
                     }
                 }
             }
@@ -82,7 +128,8 @@ fun UserHomeScreen(
 
 @Composable
 fun ProfileCard(
-    worker: Worker
+    worker: Worker,
+    onDialogStateChange : (Boolean,Worker) -> Unit
 ) {
     Card(
         modifier = Modifier.padding(14.dp)
@@ -120,7 +167,9 @@ fun ProfileCard(
                     Text(text = "Mo = ${worker.number}")
                 }
                 Button(
-                    onClick = {},
+                    onClick = {
+                        onDialogStateChange(true,worker)
+                    },
                     modifier = Modifier.padding(10.dp)
                 ) {
                     Text(text = "Book")
@@ -133,9 +182,12 @@ fun ProfileCard(
 // drop down list
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Demo_ExposedDropdownMenuBox() {
+fun Demo_ExposedDropdownMenuBox(
+    viewModel: UserHomeScreenViewModel
+) {
     val context = LocalContext.current
     val workerCategory = arrayOf(
+        "All",
         "Home Cleaning",
         "Plumber",
         "Electrician",
@@ -158,13 +210,16 @@ fun Demo_ExposedDropdownMenuBox() {
                 expanded = !expanded
             }
         ) {
-            OutlinedTextField(value = selectedText,
-                onValueChange = {},
+            OutlinedTextField(
+                value = selectedText,
+                onValueChange = {
+
+                },
                 readOnly = true,
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                 leadingIcon = { Icon(imageVector = Icons.Default.Search, contentDescription = "") },
                 modifier = Modifier.menuAnchor(),
-               label = { Text(text = "Looking For ") },
+                label = { Text(text = "Looking For ") },
 
                 )
             ExposedDropdownMenu(
@@ -176,6 +231,7 @@ fun Demo_ExposedDropdownMenuBox() {
                         text = { Text(text = item) },
                         onClick = {
                             selectedText = item
+                            viewModel.onLookingForStateChange(item)
                             expanded = false
                         }
                     )

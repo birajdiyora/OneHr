@@ -18,11 +18,7 @@
             android:exported="true"
             android:label="@string/title_activity_user"
             android:theme="@style/Theme.OneHr">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".WorkerActivity"
@@ -34,7 +30,11 @@
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.OneHr">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

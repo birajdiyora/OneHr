@@ -154,6 +154,7 @@ fun RegisterScreen(
                                                         isDialog = true
                                                     }
                                                     is ResultState.Success ->{
+                                                        MainActivity.userManager.storeUserType(USER_TYPE_USER)
                                                         isDialog = false
                                                         "Register Success".toast()
                                                         onGoToNextActivity(USER_TYPE_USER)
@@ -181,6 +182,7 @@ fun RegisterScreen(
                                                     }
 
                                                     is ResultState.Success -> {
+                                                        MainActivity.userManager.storeUserType(USER_TYPE_WORKER)
                                                         isDialog = false
                                                         "Register Success".toast()
                                                         onGoToNextActivity(USER_TYPE_WORKER)
@@ -198,7 +200,6 @@ fun RegisterScreen(
                                         isDialog = false
                                         "Some Error occur".toast()
                                     }
-
                                     is ResultState.Loading -> {
                                         isDialog = true
                                     }
@@ -437,6 +438,7 @@ fun RegisterScreen(
                             contentDescription = ""
                         )
                     },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     onValueChange = {
                         exp = it
                     },
@@ -451,6 +453,7 @@ fun RegisterScreen(
                             contentDescription = ""
                         )
                     },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     onValueChange = {
                         charge = it
                     },

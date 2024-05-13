@@ -33,6 +33,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.onehr.MainActivity
 import com.example.onehr.common.Circulerdialog
 import com.example.onehr.common.OtpView
 import com.example.onehr.common.toast
@@ -103,6 +104,7 @@ fun LoginScreen(
                         ).collect {
                             when (it) {
                                 is ResultState.Success -> {
+                                    MainActivity.userManager.storeUserType(userType)
                                     isDialog = false
                                     "Login Successfully".toast()
                                     onGotoNextActivity(userType)

@@ -1,5 +1,6 @@
 package com.example.onehr
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -29,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
+import com.example.onehr.common.TopBarOneHr
 import com.example.onehr.ui.theme.OneHrTheme
 import com.example.onehr.util.BottomNavigation
 import com.example.onehr.util.BottomNavigationItem
@@ -53,15 +55,10 @@ class UserActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     Scaffold(
                         topBar = {
-                            TopAppBar(
-                                title = {
-                                    Row (){
-                                        Text("oneHr",
-                                            fontWeight = FontWeight.Bold,
-                                            fontSize = 30.sp
-                                        )
-                                    }
-                                },
+                            TopBarOneHr(
+                                onGoToLoginActivity = {
+                                    startActivity(Intent(this@UserActivity,MainActivity::class.java))
+                                }
                             )
                         },
                         bottomBar = {

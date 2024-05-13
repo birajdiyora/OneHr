@@ -1,19 +1,25 @@
 package com.example.onehr.common
 
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -21,6 +27,11 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.example.onehr.MainActivity
+import com.example.onehr.ui.registrationScreen.USER_TYPE_WORKER
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 const val OTP_VIEW_TYPE_NONE = 0
 const val OTP_VIEW_TYPE_UNDERLINE = 1
@@ -35,7 +46,55 @@ fun Circulerdialog() {
 
 }
 
+@Composable
+fun NoAnyDataFound() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center){
+        Text(
+            text = "No Any Data Found",
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold)
+    }
+}
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopBarOneHr(
+    auth: FirebaseAuth = FirebaseAuth.getInstance(),
+    onGoToLoginActivity : () -> Unit
+) {
+//    @Inject
+//    lateinit var firebaseAuth : FirebaseAuth
+    val scope = rememberCoroutineScope()
+    TopAppBar(
+        title = {
+            Row (){
+                Text("oneHr",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 30.sp
+                )
+            }
+        },
+        actions = {
+            TextButton(onClick = {
+                FirebaseAuth.getInstance().signOut()
+                scope.launch {
+                    MainActivity.userManager.storeUserType("")
+                }
+                Log.d("test2",FirebaseAuth.getInstance().currentUser.toString())
+                onGoToLoginActivity()
+
+            }) {
+                Text(
+                    text = "Logout",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp
+                    )
+            }
+        }
+    )
+}
 @Composable
 fun OtpView(
     modifier: Modifier = Modifier,

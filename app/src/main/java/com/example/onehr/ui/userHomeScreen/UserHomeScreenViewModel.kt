@@ -25,27 +25,62 @@ class UserHomeScreenViewModel @Inject constructor(
     val db : FirebaseFirestore,
     val repository: FirebaseRepository
 ) : ViewModel() {
-
+    val currentUser = auth.currentUser
     var workerListState = mutableStateListOf<Worker>()
 //    val workerListState = _workerListState.asStateFlow()
     init {
         viewModelScope.launch {
-            db.collection("worker").get()
-                .addOnSuccessListener {
-                    val list = it.documents
-                    for (data in list){
-                        val document = data.data
-                        workerListState.add(Worker(
-                            UID = document?.get("uid") as String,
-                            name = document?.get("name") as String,
-                            number = document?.get("number") as String,
-                            category = document?.get("category") as String,
-                            charge = document?.get("charge") as String,
-                            exp = document?.get("experience") as String
-                        ))
+            updateWorkListState()
+        }
+    }
+
+    suspend fun updateWorkListState(){
+        db.collection("worker").get()
+            .addOnSuccessListener {
+                val list = it.documents
+                for (data in list){
+                    val document = data.data
+                    workerListState.add(Worker(
+                        UID = document?.get("uid") as String,
+                        name = document?.get("name") as String,
+                        number = document?.get("number") as String,
+                        category = document?.get("category") as String,
+                        charge = document?.get("charge") as String,
+                        exp = document?.get("experience") as String
+                    ))
+                }
+                Log.d("test",workerListState.toList().toString())
+            }.await()
+    }
+    fun insertAppointmentdata(worker: Worker) = repository.insertAppointmentData(userUid = currentUser!!.uid, worker = worker)
+
+    fun onLookingForStateChange(category : String) {
+        viewModelScope.launch {
+            if (category == "All") {
+                updateWorkListState()
+            } else {
+                workerListState.clear()
+                Log.w("test","in else part onLookingForStateChange")
+                db.collection("worker").get()
+                    .addOnSuccessListener {
+                        val list = it.documents
+                        for (data in list) {
+                            val document = data.data
+                            if (document?.get("category") as String == category) {
+                                workerListState.add(
+                                    Worker(
+                                        UID = document?.get("uid") as String,
+                                        name = document?.get("name") as String,
+                                        number = document?.get("number") as String,
+                                        category = document?.get("category") as String,
+                                        charge = document?.get("charge") as String,
+                                        exp = document?.get("experience") as String
+                                    )
+                                )
+                            }
+                        }
                     }
-                    Log.d("test",workerListState.toList().toString())
-                }.await()
+            }
         }
     }
 }
