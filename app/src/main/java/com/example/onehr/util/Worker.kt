@@ -7,4 +7,5 @@ data class Worker(
     val category : String = "",
     val charge : String = "",
     val exp : String = "",
+    val status : String = ""
 )

@@ -18,6 +18,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
+import okhttp3.internal.wait
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -25,7 +26,7 @@ class FirebaseRepositoryImpl @Inject constructor(
     private val authDb : FirebaseAuth,
     private val db : FirebaseFirestore
 ) : FirebaseRepository{
-    val currentUser = authDb.currentUser
+//    val currentUser = authDb.currentUser
     private lateinit var verificationCode : String
     override fun createUserWithPhone(phone: String,activity: Activity): Flow<ResultState<String>> = callbackFlow {
 
@@ -102,9 +103,10 @@ class FirebaseRepositoryImpl @Inject constructor(
 
     override fun insertUserdata(registrationData: RegistrationData): Flow<ResultState<String>> = callbackFlow {
         trySend(ResultState.Loading)
-        db.collection("user").document(currentUser!!.uid).set(
+
+        db.collection("user").document(authDb.currentUser!!.uid).set(
             hashMapOf(
-                "uid" to currentUser.uid,
+                "uid" to authDb.currentUser!!.uid,
                 "name" to registrationData.name,
                 "number" to registrationData.mobileNumber,
                 "address" to registrationData.address
@@ -128,9 +130,9 @@ class FirebaseRepositoryImpl @Inject constructor(
 
     override fun insertWorkerdata(registrationData: RegistrationData): Flow<ResultState<String>> = callbackFlow {
         trySend(ResultState.Loading)
-        db.collection("worker").document(currentUser!!.uid).set(
+        db.collection("worker").document(authDb.currentUser!!.uid).set(
             hashMapOf(
-                "uid" to currentUser.uid,
+                "uid" to authDb.currentUser!!.uid,
                 "number" to registrationData.mobileNumber,
                 "name" to registrationData.name,
                 "category" to registrationData.category,
@@ -159,7 +161,7 @@ class FirebaseRepositoryImpl @Inject constructor(
 
         db.collection("allUser").document(registrationData.mobileNumber).set(
             hashMapOf(
-                "uid" to currentUser!!.uid,
+                "uid" to authDb.currentUser!!.uid,
                 "name" to registrationData.name,
                 "userType" to registrationData.userType,
                 "number" to registrationData.mobileNumber,
@@ -190,7 +192,8 @@ class FirebaseRepositoryImpl @Inject constructor(
                 "workerNumber" to worker.number,
                 "workerCategory" to worker.category,
                 "workerCharge" to worker.charge,
-                "workerExperience" to worker.exp
+                "workerExperience" to worker.exp,
+                "status" to "pending"
             )
         )
             .addOnCompleteListener {
