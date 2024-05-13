@@ -9,6 +9,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -19,6 +20,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -28,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.onehr.MainActivity
+import com.example.onehr.R
 import com.example.onehr.ui.registrationScreen.USER_TYPE_WORKER
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
@@ -79,11 +82,14 @@ fun TopBarOneHr(
         actions = {
             TextButton(onClick = {
                 FirebaseAuth.getInstance().signOut()
-                scope.launch {
-                    MainActivity.userManager.storeUserType("")
+                if(FirebaseAuth.getInstance().currentUser == null){
+                    scope.launch {
+                        MainActivity.userManager.storeUserType("")
+                    }
+                    onGoToLoginActivity()
+                    Log.d("test2",FirebaseAuth.getInstance().currentUser.toString())
                 }
-                Log.d("test2",FirebaseAuth.getInstance().currentUser.toString())
-                onGoToLoginActivity()
+
 
             }) {
                 Text(
@@ -195,5 +201,22 @@ private fun CharView(
                     .width(containerSize)
             )
         }
+    }
+}
+
+@Composable
+fun DataIsEmpty() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.empty),
+            contentDescription = null,
+            modifier = Modifier
+                .size(150.dp)
+        )
     }
 }

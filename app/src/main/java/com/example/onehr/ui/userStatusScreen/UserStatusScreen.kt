@@ -1,6 +1,8 @@
 package com.example.onehr.ui.userStatusScreen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -85,15 +87,30 @@ fun ProfileCard(
                                         Text(text = "Charge = ${worker.charge}")
                                         Text(text = "Mo = ${worker.number}")
                                 }
-
-
-                                Button(
-                                        onClick = {},
-                                        modifier = Modifier.padding(7.dp)
+                                Box(
+                                        modifier = Modifier
+                                                .padding(8.dp)
                                 ) {
-                                        Text(text = "${worker.status}")
+                                        if (worker.status == "pending") {
+                                                Text(
+                                                        text = "PENDING",
+                                                        modifier = Modifier
+                                                                .background(Color.Yellow)
+                                                                .padding(8.dp),
+                                                        fontSize = 16.sp
+                                                )
+                                        } else {
+                                                Text(
+                                                        text = "CONFIRM",
+                                                        modifier = Modifier
+                                                                .background(Color.Green)
+                                                                .padding(8.dp),
+                                                        fontSize = 16.sp
+                                                )
+                                        }
                                 }
-                        }
+                                }
+
                 }
         }
 }

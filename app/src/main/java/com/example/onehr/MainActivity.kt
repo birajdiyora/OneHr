@@ -58,7 +58,7 @@ class MainActivity : ComponentActivity() {
 //                    RegisterScreen(
 //                        activity = this@MainActivity,
 //                    )
-                    if (firebaseAuth.currentUser == null) {
+                    if (FirebaseAuth.getInstance().currentUser == null) {
                         Log.d("test","this in user login in mainactivity")
                         AuthenticationNavigation(
                             activity = this@MainActivity,

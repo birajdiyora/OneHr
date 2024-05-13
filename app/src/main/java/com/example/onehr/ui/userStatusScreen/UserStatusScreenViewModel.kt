@@ -23,7 +23,11 @@ class UserStatusScreenViewModel @Inject constructor(
     var workerListState = mutableStateListOf<Worker>()
     init {
         viewModelScope.launch {
-            updateWorkerListState()
+//            updateWorkerListState()
+            db.collection("appointment").addSnapshotListener { value, error ->
+                workerListState.clear()
+                updateWorkerListState()
+            }
         }
     }
 

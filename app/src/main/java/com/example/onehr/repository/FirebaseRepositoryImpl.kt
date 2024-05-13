@@ -19,6 +19,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
 import okhttp3.internal.wait
+import java.util.Random
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -184,7 +186,8 @@ class FirebaseRepositoryImpl @Inject constructor(
 
     override fun insertAppointmentData(userUid: String, worker: Worker): Flow<ResultState<String>> = callbackFlow{
         trySend(ResultState.Loading)
-        db.collection("appointment").document().set(
+        val UID = UUID.randomUUID().toString()
+        db.collection("appointment").document(UID).set(
             hashMapOf(
                 "userUid" to userUid,
                 "workerUid" to worker.UID,
@@ -193,7 +196,8 @@ class FirebaseRepositoryImpl @Inject constructor(
                 "workerCategory" to worker.category,
                 "workerCharge" to worker.charge,
                 "workerExperience" to worker.exp,
-                "status" to "pending"
+                "status" to "pending",
+                "appointmentId" to UID
             )
         )
             .addOnCompleteListener {
