@@ -197,7 +197,8 @@ class FirebaseRepositoryImpl @Inject constructor(
                 "workerCharge" to worker.charge,
                 "workerExperience" to worker.exp,
                 "status" to "pending",
-                "appointmentId" to UID
+                "appointmentId" to UID,
+                "timestamp" to System.currentTimeMillis()
             )
         )
             .addOnCompleteListener {

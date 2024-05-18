@@ -29,8 +29,13 @@ class UserHomeScreenViewModel @Inject constructor(
     var workerListState = mutableStateListOf<Worker>()
 //    val workerListState = _workerListState.asStateFlow()
     init {
-        viewModelScope.launch {
-            updateWorkListState()
+//            updateWorkListState()
+            db.collection("worker").addSnapshotListener { value, error ->
+                viewModelScope.launch {
+                    workerListState.clear()
+                    updateWorkListState()
+                }
+
         }
     }
 

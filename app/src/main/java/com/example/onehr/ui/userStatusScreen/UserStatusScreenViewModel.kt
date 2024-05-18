@@ -8,6 +8,7 @@ import com.example.onehr.repository.FirebaseRepository
 import com.example.onehr.util.Worker
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,7 +33,9 @@ class UserStatusScreenViewModel @Inject constructor(
     }
 
     fun updateWorkerListState() {
-        db.collection("appointment").get()
+        db.collection("appointment")
+            .orderBy("timestamp", Query.Direction.DESCENDING)
+            .get()
             .addOnSuccessListener {
                 val list = it.documents
                 for (data in list){

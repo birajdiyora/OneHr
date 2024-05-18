@@ -10,6 +10,7 @@ import com.example.onehr.util.ResultState
 import com.example.onehr.util.Worker
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -34,7 +35,9 @@ class WorkerHomeScreenViewModel @Inject constructor(
     }
 
     fun updateRequesterListState() {
-        db.collection("appointment").get()
+        db.collection("appointment")
+            .orderBy("timestamp", Query.Direction.DESCENDING)
+            .get()
             .addOnSuccessListener {
                 val documents = it.documents
                 for(data in documents){
